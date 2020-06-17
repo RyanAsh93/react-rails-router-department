@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Header } from 'semantic-ui-react';
-import axios from 'axios';
+import { Card, Header, Button } from 'semantic-ui-react';
+import Axios from 'axios';
+import ProductsForm from './ProductForm';
+import ProductView from './ProductView'
 
 const Products = (props) => {
   const [products, setProducts] = useState([])
+  const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
-    axios
+    Axios
     .get('/api/products')
     .then((res) => {
       console.log(res)
@@ -16,6 +19,10 @@ const Products = (props) => {
       console.log(e)
     })
   }, [])
+
+  const addProduct = (productObj) => {
+    setProducts([productObj, ...products])
+  }
 
 const renderProducts = () => {
   if (products.length <= 0)
@@ -33,6 +40,8 @@ const renderProducts = () => {
 
   return (
     <div>
+      {showForm && <ProductsForm add={addProduct} />}
+      <Button onClick={() => setShowForm(!showForm)}>Toggle Form</Button>
       <Header as='h1'>Expensive Produce Department</Header>
       <br />
       <Card.Group>{renderProducts()}</Card.Group>
