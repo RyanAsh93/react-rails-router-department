@@ -4,7 +4,7 @@ import Axios from 'axios'
 
 class ProductsForm extends React.Component {
   defaultValues = { name: '', price: ''}
-  state = this.props.ProductsForm
+  state = this.props.Product
   ? {...this.props.product}
   : {...this.defaultValues}
 
@@ -12,15 +12,15 @@ class ProductsForm extends React.Component {
     e.preventDefault()
     const product = {...this.state}
     if(!product.id) {
-      Axios.post('api/products', { product: product }).then((res) => {
-        this.props.add(res.data)
-        console.log(e)
-      })
-    } else {
-        Axios.put(`/api/products/${product.id}`, {product: product }).then((res) => {
-          this.props.update(res.data)
+        Axios.post('/api/products', { product: product }).then((res) => {
+          this.props.add(res.data)
         })
-      }
+
+    } else {
+      Axios.put(`/api/products/${product.id}`, {product: product }).then((res) => {
+        this.props.update(res.data)
+      })
+    }
       this.setState({...this.defaultValues })
     }
 

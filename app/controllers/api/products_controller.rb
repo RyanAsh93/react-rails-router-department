@@ -6,12 +6,25 @@ class Api::ProductsController < ApplicationController
   end
 
   def show
+    rende json: { product: @product }
   end
 
   def create
+    product = Product.new(product_params)
+    
+    if product.save
+      render json: product
+    else
+      render json: products.errors, status: 422
+    end
   end
 
   def update
+    if @product.update(product_params)
+      render json: @product
+    else
+      render json: @products.errors, status: 422
+    end
   end
 
   def destroy
@@ -20,5 +33,9 @@ class Api::ProductsController < ApplicationController
 
   def set_product
     @product = Product.find(params[:id])
+  end
+
+  def product_params
+    params.require(:product).permit(:name, :price)
   end
 end
